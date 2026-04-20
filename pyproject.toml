@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "wapimaji-mcp"
+version = "0.1.0"
+description = "MCP server for Kenya water stress and drought intelligence"
+readme = "README.md"
+license = "CC-BY-NC-ND-4.0"
+license-files = ["LICENSE"]
+authors = [{name = "Gabriel Mahia", email = "contact@aikungfu.dev"}]
+keywords = ["mcp", "kenya", "water", "drought", "africa", "ndma", "east-africa"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "httpx>=0.27.0",
+    "africastalking>=1.2.7",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.5.0",
+]
+
+[project.scripts]
+wapimaji-mcp = "wapimaji_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/gabrielmahia/wapimaji-mcp"
+Repository = "https://github.com/gabrielmahia/wapimaji-mcp"
