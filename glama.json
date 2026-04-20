@@ -1,0 +1,36 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "wapimaji-mcp",
+  "description": "MCP server for Kenya water stress and drought intelligence. Exposes NDMA drought phase classifications for all 47 counties and SMS alert capability via Africa's Talking.",
+  "license": "CC-BY-NC-ND-4.0",
+  "homepage": "https://github.com/gabrielmahia/wapimaji-mcp",
+  "author": {
+    "name": "Gabriel Mahia",
+    "email": "contact@aikungfu.dev",
+    "url": "https://gabrielmahia.github.io"
+  },
+  "keywords": ["kenya","water","drought","ndma","africa","mcp","sms","africa-talking","east-africa"],
+  "tools": [
+    {
+      "name": "get_drought_status",
+      "description": "Get current NDMA drought phase for a Kenya county (1=Minimal to 5=Famine).",
+      "annotations": {"readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true}
+    },
+    {
+      "name": "get_drought_alerts",
+      "description": "Get all Kenya counties at or above a specified drought phase level.",
+      "annotations": {"readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true}
+    },
+    {
+      "name": "sms_drought_alert",
+      "description": "Send drought alert SMS to a list of phone numbers via Africa's Talking. Destructive — sends real messages.",
+      "annotations": {"readOnlyHint": false, "destructiveHint": true, "idempotentHint": false, "openWorldHint": true}
+    }
+  ],
+  "repository": {"type": "git", "url": "https://github.com/gabrielmahia/wapimaji-mcp"},
+  "installation": {"pip": "wapimaji-mcp", "uvx": "wapimaji-mcp"},
+  "related": [
+    {"name": "mpesa-mcp", "url": "https://pypi.org/project/mpesa-mcp/", "description": "M-Pesa + Africa's Talking MCP server"},
+    {"name": "wapimaji", "url": "https://wapimaji.streamlit.app", "description": "Kenya drought dashboard"}
+  ]
+}
