@@ -31,3 +31,9 @@ wapimaji-mcp = "wapimaji_mcp.server:main"
 [project.urls]
 Homepage = "https://github.com/gabrielmahia/wapimaji-mcp"
 Repository = "https://github.com/gabrielmahia/wapimaji-mcp"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
