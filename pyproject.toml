@@ -7,7 +7,7 @@ name = "wapimaji-mcp"
 version = "0.1.0"
 description = "MCP server for Kenya water stress and drought intelligence"
 readme = "README.md"
-license = "CC-BY-NC-ND-4.0"
+license = "MIT"
 license-files = ["LICENSE"]
 authors = [{name = "Gabriel Mahia", email = "contact@aikungfu.dev"}]
 keywords = ["mcp", "kenya", "water", "drought", "africa", "ndma", "east-africa"]
