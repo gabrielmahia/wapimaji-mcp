@@ -9,28 +9,86 @@
     "email": "contact@aikungfu.dev",
     "url": "https://gabrielmahia.github.io"
   },
-  "keywords": ["kenya","water","drought","ndma","africa","mcp","sms","africa-talking","east-africa"],
+  "keywords": [
+    "kenya",
+    "water",
+    "drought",
+    "ndma",
+    "africa",
+    "mcp",
+    "sms",
+    "africa-talking",
+    "east-africa"
+  ],
   "tools": [
     {
       "name": "get_drought_status",
       "description": "Get current NDMA drought phase for a Kenya county (1=Minimal to 5=Famine).",
-      "annotations": {"readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true}
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "get_drought_alerts",
       "description": "Get all Kenya counties at or above a specified drought phase level.",
-      "annotations": {"readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true}
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "sms_drought_alert",
-      "description": "Send drought alert SMS to a list of phone numbers via Africa's Talking. Destructive — sends real messages.",
-      "annotations": {"readOnlyHint": false, "destructiveHint": true, "idempotentHint": false, "openWorldHint": true}
+      "description": "Send drought alert SMS to a list of phone numbers via Africa's Talking. Destructive \u2014 sends real messages.",
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     }
   ],
-  "repository": {"type": "git", "url": "https://github.com/gabrielmahia/wapimaji-mcp"},
-  "installation": {"pip": "wapimaji-mcp", "uvx": "wapimaji-mcp"},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabrielmahia/wapimaji-mcp"
+  },
+  "installation": {
+    "pip": "wapimaji-mcp",
+    "uvx": "wapimaji-mcp"
+  },
   "related": [
-    {"name": "mpesa-mcp", "url": "https://pypi.org/project/mpesa-mcp/", "description": "M-Pesa + Africa's Talking MCP server"},
-    {"name": "wapimaji", "url": "https://wapimaji.streamlit.app", "description": "Kenya drought dashboard"}
+    {
+      "name": "mpesa-mcp",
+      "url": "https://glama.ai/mcp/servers/gabrielmahia/mpesa-mcp",
+      "description": "M-Pesa payments + Africa's Talking SMS MCP server (3,240+ PyPI downloads)"
+    }
+  ],
+  "maintainers": [
+    "gabrielmahia"
+  ],
+  "version": "0.1.0",
+  "envVars": [
+    {
+      "name": "AT_USERNAME",
+      "description": "Africa's Talking username (use 'sandbox' for testing)",
+      "required": false,
+      "secret": false
+    },
+    {
+      "name": "AT_API_KEY",
+      "description": "Africa's Talking API key",
+      "required": false,
+      "secret": true
+    },
+    {
+      "name": "SANDBOX",
+      "description": "Set to 'true' for sandbox mode. Default: true",
+      "required": false,
+      "secret": false
+    }
   ]
 }
