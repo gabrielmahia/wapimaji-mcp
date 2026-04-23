@@ -2,7 +2,7 @@
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "wapimaji-mcp",
   "description": "MCP server for Kenya water stress and drought intelligence. Exposes NDMA drought phase classifications for all 47 counties and SMS alert capability via Africa's Talking.",
-  "license": "CC-BY-NC-ND-4.0",
+  "license": "MIT",
   "homepage": "https://github.com/gabrielmahia/wapimaji-mcp",
   "author": {
     "name": "Gabriel Mahia",
