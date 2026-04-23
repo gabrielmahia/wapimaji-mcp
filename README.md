@@ -2,7 +2,7 @@
 
 > MCP server giving AI agents real-time access to Kenya's water stress and drought data — all 47 counties, NDMA drought phase classifications, and SMS alert capability via Africa's Talking.
 
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
 
@@ -77,5 +77,5 @@ uvx wapimaji-mcp
 ## IP & Collaboration
 
 © 2026 Gabriel Mahia · [contact@aikungfu.dev](mailto:contact@aikungfu.dev)
-License: CC BY-NC-ND 4.0
+License: MIT
 Not affiliated with NDMA or Africa's Talking.
