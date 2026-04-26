@@ -91,5 +91,6 @@
       "secret": false
     }
   ],
-  "_updated": "2026-04-25"
+  "_updated": "2026-04-25",
+  "dockerfile": "Dockerfile"
 }
