@@ -1,9 +1,10 @@
 {
-  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "$schema": "https://glama.ai/mcp/schemas/1.0.0/server.json",
   "name": "wapimaji-mcp",
-  "description": "MCP server for Kenya water stress and drought intelligence. Exposes NDMA drought phase classifications for all 47 counties and SMS alert capability via Africa's Talking.",
+  "version": "0.1.2",
+  "description": "MCP server for Kenya water infrastructure and drought intelligence. Tools for NDMA drought phase classifications across all 47 counties, water stress data, and SMS-based alert dispatch via Africa's Talking.",
   "license": "MIT",
-  "homepage": "https://github.com/gabrielmahia/wapimaji-mcp",
+  "homepage": "https://gabrielmahia.github.io",
   "author": {
     "name": "Gabriel Mahia",
     "email": "contact@aikungfu.dev",
@@ -16,14 +17,16 @@
     "ndma",
     "africa",
     "mcp",
+    "model-context-protocol",
     "sms",
     "africa-talking",
-    "east-africa"
+    "east-africa",
+    "civic-tech"
   ],
   "tools": [
     {
       "name": "get_drought_status",
-      "description": "Get current NDMA drought phase for a Kenya county (1=Minimal to 5=Famine).",
+      "description": "Get current NDMA drought phase for a Kenya county (Phase 1=Minimal to 5=Famine). Returns population affected, risk level, and recommended interventions.",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -33,7 +36,7 @@
     },
     {
       "name": "get_drought_alerts",
-      "description": "Get all Kenya counties at or above a specified drought phase level.",
+      "description": "Get all Kenya counties at or above a drought phase threshold. Use to identify counties needing humanitarian response.",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -43,7 +46,7 @@
     },
     {
       "name": "sms_drought_alert",
-      "description": "Send drought alert SMS to a list of phone numbers via Africa's Talking. Destructive \u2014 sends real messages.",
+      "description": "Send drought alert SMS to a recipient list via Africa's Talking. For NGO field teams, government officials, and community leaders.",
       "annotations": {
         "readOnlyHint": false,
         "destructiveHint": true,
@@ -60,37 +63,48 @@
     "pip": "wapimaji-mcp",
     "uvx": "wapimaji-mcp"
   },
-  "related": [
+  "relatedServers": [
     {
       "name": "mpesa-mcp",
-      "url": "https://glama.ai/mcp/servers/gabrielmahia/mpesa-mcp",
-      "description": "M-Pesa payments + Africa's Talking SMS MCP server (3,240+ PyPI downloads)"
+      "url": "https://github.com/gabrielmahia/mpesa-mcp",
+      "description": "M-PESA Daraja API MCP server"
+    },
+    {
+      "name": "swahili-health-mcp",
+      "url": "https://github.com/gabrielmahia/swahili-health-mcp",
+      "description": "Kenya DHIS2 health data MCP"
+    },
+    {
+      "name": "civic-agent-kit",
+      "url": "https://github.com/gabrielmahia/civic-agent-kit",
+      "description": "Kenya civic data MCP (budget, parliament, SACCO, rights)"
     }
   ],
   "maintainers": [
     "gabrielmahia"
   ],
-  "version": "0.1.0",
   "envVars": [
     {
       "name": "AT_USERNAME",
-      "description": "Africa's Talking username (use 'sandbox' for testing)",
+      "description": "Africa's Talking username. Use 'sandbox' for testing.",
       "required": false,
-      "secret": false
+      "secret": false,
+      "example": "sandbox"
     },
     {
       "name": "AT_API_KEY",
-      "description": "Africa's Talking API key",
+      "description": "Africa's Talking API key for SMS alerts",
       "required": false,
       "secret": true
-    },
-    {
-      "name": "SANDBOX",
-      "description": "Set to 'true' for sandbox mode. Default: true",
-      "required": false,
-      "secret": false
     }
   ],
-  "_updated": "2026-04-25",
-  "dockerfile": "Dockerfile"
+  "docker": {
+    "buildSteps": [
+      "pip install wapimaji-mcp==0.1.2"
+    ],
+    "cmd": [
+      "wapimaji-mcp"
+    ],
+    "pythonVersion": "3.11"
+  }
 }
