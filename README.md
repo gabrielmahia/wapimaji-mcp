@@ -1,6 +1,7 @@
 # 💧 WapiMaji MCP — Kenya Water & Drought Intelligence
 
 [![wapimaji-mcp Glama score](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp/badges/score.svg)](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp)
+[![smithery badge](https://smithery.ai/badge/@gabrielmahia/wapimaji-mcp)](https://smithery.ai/server/@gabrielmahia/wapimaji-mcp)
 
 
 > MCP server giving AI agents real-time access to Kenya's water stress and drought data — all 47 counties, NDMA drought phase classifications, and SMS alert capability via Africa's Talking.
