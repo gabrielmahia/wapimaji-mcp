@@ -20,7 +20,6 @@
     "model-context-protocol",
     "sms",
     "africa-talking",
-    "east-africa",
     "civic-tech",
     "data-sovereignty",
     "global-south",
@@ -28,7 +27,9 @@
     "privacy",
     "open-data",
     "coordination-infrastructure",
-    "institutional-infrastructure"
+    "institutional-infrastructure",
+    "useful-rails",
+    "ai-agents"
   ],
   "tools": [
     {
