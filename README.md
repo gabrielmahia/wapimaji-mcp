@@ -83,3 +83,21 @@ uvx wapimaji-mcp
 © 2026 Gabriel Mahia · [contact@aikungfu.dev](mailto:contact@aikungfu.dev)
 License: MIT
 Not affiliated with NDMA or Africa's Talking.
+
+
+## Data Sources
+
+This server draws on open and public domain datasets for drought intelligence:
+
+**Open Government Data (Public Domain)**
+- NASA MODIS NDVI — vegetation index for drought early warning
+- NOAA CHIRPS — daily rainfall estimates (0.05° resolution)
+- NASA TRMM — monthly precipitation
+- USDA FEWS NET — East Africa livelihood zones
+
+**Historical Baseline Data (Public Domain)**
+- East Africa Meteorological Records 1900-1940 (colonial era, PD)
+- Kew Gardens East Africa Survey 1910 (botanical PD)
+
+These are structured in [africa-open-climate-data](https://huggingface.co/datasets/gmahia/africa-open-climate-data)
+and [east-africa-agricultural-pd](https://huggingface.co/datasets/gmahia/east-africa-agricultural-pd).
