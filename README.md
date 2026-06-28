@@ -101,3 +101,16 @@ This server draws on open and public domain datasets for drought intelligence:
 
 These are structured in [africa-open-climate-data](https://huggingface.co/datasets/gmahia/africa-open-climate-data)
 and [east-africa-agricultural-pd](https://huggingface.co/datasets/gmahia/east-africa-agricultural-pd).
+
+## Part of the East Africa Coordination Stack
+
+This MCP server is one of 32 tools in the Kenya coordination infrastructure.
+Connect it to [`africa-coord-bus`](https://github.com/gabrielmahia/africa-coord-bus) —
+the coordination event bus that routes signals between domains automatically.
+
+```bash
+pip install africa-coord-bus
+```
+
+All 32 servers: [pypi.org/user/gmahia](https://pypi.org/user/gmahia/)
+Live demo: [coord-cascade-demo](https://github.com/gabrielmahia/coord-cascade-demo)
