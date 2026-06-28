@@ -6,6 +6,8 @@ import os
 import json
 import httpx
 from mcp.server.fastmcp import FastMCP
+from wapimaji_mcp.coordination import publish_drought_event
+
 
 mcp = FastMCP("wapimaji-mcp")
 
@@ -113,3 +115,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+@mcp.tool()
+def publish_drought_coordination(county: str, phase: int = 0,
+                                  rainfall_deficit_pct: float = 0.0) -> dict:
+    """
+    Publish a drought coordination event to africa-coord-bus so downstream
+    MCP servers respond automatically (bima-mcp insurance eval, kilimo-mcp
+    advisory, afya-mcp malnutrition watch, county-mcp alert).
+    Phase 2=Stressed, 3=Crisis, 4=Emergency trigger coordination.
+    """
+    county_codes = {
+        "Turkana": 23, "Marsabit": 22, "Wajir": 37, "Mandera": 29,
+        "Garissa": 9, "Tana River": 28, "Kilifi": 25, "Kwale": 17,
+    }
+    code = county_codes.get(county.strip().title(), 0)
+    if phase == 0:
+        status = get_drought_status(county)
+        phase = status.get("phase", 1)
+        rainfall_deficit_pct = status.get("rainfall_deficit_pct", 0.0)
+    return publish_drought_event(county.strip().title(), code, phase, rainfall_deficit_pct)
