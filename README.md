@@ -74,7 +74,7 @@ uvx wapimaji-mcp
 
 ## Related
 
-- [mpesa-mcp](https://pypi.org/project/mpesa-mcp/) — M-Pesa + Africa's Talking MCP server (3,000+ downloads)
+- [mpesa-mcp](https://pypi.org/project/mpesa-mcp/) — M-Pesa + Africa's Talking MCP server
 - [WapiMaji](https://wapimaji.streamlit.app) — The Streamlit dashboard version
 - [gabrielmahia.github.io](https://gabrielmahia.github.io) — Full civic portfolio
 
