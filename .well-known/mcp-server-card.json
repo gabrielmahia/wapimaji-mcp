@@ -1,0 +1,30 @@
+{
+  "schema_version": "2026-mcp-server-card-draft-1",
+  "name": "wapimaji-mcp",
+  "description": "Kenya water data MCP server. NDMA drought alerts, WRMA water quality, county-level monitoring.",
+  "version": "0.1.3",
+  "homepage": "https://github.com/gabrielmahia/wapimaji-mcp",
+  "pypi": "https://pypi.org/project/wapimaji-mcp/",
+  "tested_models": [
+    "claude-sonnet-5",
+    "claude-opus-4-8"
+  ],
+  "domains": [
+    "water",
+    "drought",
+    "agriculture",
+    "kenya",
+    "east-africa"
+  ],
+  "transport": [
+    "stdio"
+  ],
+  "auth": "environment-variables",
+  "languages": [
+    "en",
+    "sw"
+  ],
+  "security_contact": "security@mngonline.dev",
+  "license": "MIT",
+  "dpga_review": "GID0093744"
+}
