@@ -1,5 +1,5 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.gabrielmahia/wapimaji-mcp",
   "description": "\ud83d\udca7 WapiMaji MCP \u2014 Kenya Water & Drought Intelligence",
   "repository": {
@@ -9,7 +9,7 @@
   "version": "0.1.5",
   "packages": [
     {
-      "registry_type": "pypi",
+      "registryType": "pypi",
       "identifier": "wapimaji-mcp",
       "version": "0.1.5",
       "transport": {
