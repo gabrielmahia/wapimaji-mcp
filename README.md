@@ -1,4 +1,5 @@
 # 💧 WapiMaji MCP — Kenya Water & Drought Intelligence
+<!-- mcp-name: io.github.gabrielmahia/wapimaji-mcp -->
 
 [![wapimaji-mcp Glama score](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp/badges/score.svg)](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp)
 [![smithery badge](https://smithery.ai/badge/@gabrielmahia/wapimaji-mcp)](https://smithery.ai/server/@gabrielmahia/wapimaji-mcp)

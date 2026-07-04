@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wapimaji-mcp"
-version = "0.1.4"
+version = "0.1.5"
 description = "MCP server for Kenya water stress and drought intelligence"
 classifiers = [
     "Development Status :: 4 - Beta",
