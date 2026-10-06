@@ -77,6 +77,17 @@ uvx wapimaji-mcp
 
 ## Data sources
 
+### Runtime safety and data limits
+
+`SANDBOX=true` (the default) uses simulated county drought values, including
+aggregate alerts. These values are not observations from NDMA. Live aggregate
+alerts are not implemented and return an explicit error with unknown status.
+
+SMS calls in sandbox return `sent: false` without contacting Africa's Talking.
+Live SMS requires both `SANDBOX=false` and `confirm_send=true`, supplied only after
+the user explicitly confirms that send. Provider acceptance does not establish
+delivery to the recipient.
+
 - **NDMA** — National Drought Management Authority drought phase classifications
 - **Kenya Meteorological Department** — rainfall data
 - **FEWS NET** — Famine Early Warning System food security projections

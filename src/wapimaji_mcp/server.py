@@ -61,9 +61,13 @@ def get_drought_status(county: str) -> dict:
 @mcp.tool()
 def get_drought_alerts(min_phase: int = 3) -> dict:
     """
-    Get all Kenya counties at or above a given drought phase.
+    Get simulated Kenya county alerts in sandbox mode.
+    Live aggregate drought data is not implemented; production fails explicitly.
     min_phase: 1=Minimal, 2=Stressed, 3=Crisis, 4=Emergency, 5=Famine
     """
+    if os.getenv("SANDBOX", "true").lower() != "true":
+        return {"error": "Live aggregate drought data is not implemented; status is unknown",
+                "sandbox": False}
     import hashlib
     results = []
     for county in COUNTIES:
@@ -80,6 +84,8 @@ def get_drought_alerts(min_phase: int = 3) -> dict:
         "count": len(results),
         "min_phase_queried": min_phase,
         "phase_label": DROUGHT_PHASES.get(min_phase, "Unknown"),
+        "sandbox": True,
+        "source": "Sandbox simulation (not observed NDMA data)",
     }
 
 
@@ -88,14 +94,22 @@ def sms_drought_alert(
     phone_numbers: list,
     message: str,
     sender_id: str = "WAPIMAJI",
+    confirm_send: bool = False,
 ) -> dict:
     """
     Send a drought alert SMS via Africa's Talking.
-    DESTRUCTIVE — sends real SMS in production. Use SANDBOX=true for testing.
+    DESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.
+    Sandbox returns a simulation without contacting the provider.
+    confirm_send: explicit user confirmation for this send; defaults to false.
     phone_numbers: list of E.164 format numbers e.g. ["+254712345678"]
     message: SMS text (max 160 chars)
     sender_id: registered AT sender ID
     """
+    if os.getenv("SANDBOX", "true").lower() == "true":
+        return {"sent": False, "sandbox": True, "count": len(phone_numbers),
+                "note": "Sandbox simulation; no SMS sent"}
+    if confirm_send is not True:
+        return {"sent": False, "error": "Explicit user confirmation is required (confirm_send=true)"}
     try:
         import africastalking
         username = os.getenv("AT_USERNAME", "sandbox")
