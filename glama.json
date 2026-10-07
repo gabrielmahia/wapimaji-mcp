@@ -1,8 +1,8 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/1.0.0/server.json",
   "name": "wapimaji-mcp",
-  "version": "0.1.2",
-  "description": "MCP server for Kenya water infrastructure and drought intelligence. Tools for NDMA drought phase classifications across all 47 counties, water stress data, and SMS-based alert dispatch via Africa's Talking.",
+  "version": "0.1.9",
+  "description": "MCP server for Kenya water stress and drought intelligence",
   "license": "MIT",
   "homepage": "https://gabrielmahia.github.io",
   "author": {
@@ -34,7 +34,7 @@
   "tools": [
     {
       "name": "get_drought_status",
-      "description": "Get current NDMA drought phase for a Kenya county (Phase 1=Minimal to 5=Famine). Returns population affected, risk level, and recommended interventions.",
+      "description": "Get current NDMA drought phase classification for a Kenya county.\n    Returns drought phase (1=Minimal to 5=Famine), rainfall deficit %, and population affected.\n    county: Kenya county name e.g. Turkana, Marsabit, Garissa",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -44,7 +44,7 @@
     },
     {
       "name": "get_drought_alerts",
-      "description": "Get all Kenya counties at or above a drought phase threshold. Use to identify counties needing humanitarian response.",
+      "description": "Get simulated Kenya county alerts in sandbox mode.\n    Live aggregate drought data is not implemented; production fails explicitly.\n    min_phase: 1=Minimal, 2=Stressed, 3=Crisis, 4=Emergency, 5=Famine",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -54,13 +54,17 @@
     },
     {
       "name": "sms_drought_alert",
-      "description": "Send drought alert SMS to a recipient list via Africa's Talking. For NGO field teams, government officials, and community leaders.",
+      "description": "Send a drought alert SMS via Africa's Talking.\n    DESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.\n    Sandbox returns a simulation without contacting the provider.\n    confirm_send: explicit user confirmation for this send; defaults to false.\n    phone_numbers: list of E.164 format numbers e.g. [\"+254712345678\"]\n    message: SMS text (max 160 chars)\n    sender_id: registered AT sender ID",
       "annotations": {
         "readOnlyHint": false,
         "destructiveHint": true,
         "idempotentHint": false,
         "openWorldHint": true
       }
+    },
+    {
+      "name": "publish_drought_coordination",
+      "description": "Publish a drought coordination event to africa-coord-bus so downstream\n    MCP servers respond automatically (bima-mcp insurance eval, kilimo-mcp\n    advisory, afya-mcp malnutrition watch, county-mcp alert).\n    Phase 2=Stressed, 3=Crisis, 4=Emergency trigger coordination."
     }
   ],
   "repository": {
