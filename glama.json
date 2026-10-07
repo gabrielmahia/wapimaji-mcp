@@ -1,7 +1,7 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/1.0.0/server.json",
   "name": "wapimaji-mcp",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "MCP server for Kenya water stress and drought intelligence",
   "license": "MIT",
   "homepage": "https://gabrielmahia.github.io",

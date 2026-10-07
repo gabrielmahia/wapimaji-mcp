@@ -2,12 +2,13 @@
 WapiMaji MCP — Kenya water stress and drought intelligence.
 MCP server exposing NDMA drought data and AT SMS alerts.
 """
-import os
 import json
-import httpx
-from mcp.server.fastmcp import FastMCP
-from wapimaji_mcp.coordination import publish_drought_event
+import os
 
+import httpx
+from fastmcp import FastMCP
+
+from wapimaji_mcp.coordination import publish_drought_event
 
 mcp = FastMCP("wapimaji-mcp")
 
@@ -33,7 +34,7 @@ def get_drought_status(county: str) -> dict:
     """
     county = county.strip().title()
     if county not in COUNTIES:
-        return {"error": f"County not found. Example valid counties: Turkana, Marsabit, Garissa"}
+        return {"error": "County not found. Example valid counties: Turkana, Marsabit, Garissa"}
 
     sandbox = os.getenv("SANDBOX", "true").lower() == "true"
     if sandbox:
@@ -54,7 +55,7 @@ def get_drought_status(county: str) -> dict:
             timeout=10
         )
         return r.json()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001  (tool boundary: return the error to the model instead of crashing the server)
         return {"error": str(e)}
 
 
@@ -119,7 +120,7 @@ def sms_drought_alert(
         response = sms.send(message, phone_numbers,
                             sender_id=sender_id if username != "sandbox" else None)
         return {"sent": True, "response": response, "count": len(phone_numbers)}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001  (tool boundary: return the error to the model instead of crashing the server)
         return {"error": str(e)}
 
 

@@ -1,10 +1,12 @@
 """Smoke tests for wapimaji-mcp server."""
 import os
+
 os.environ["SANDBOX"] = "true"
 os.environ["AT_USERNAME"] = "sandbox"
 os.environ["AT_API_KEY"] = "test_key"
 
-from wapimaji_mcp.server import get_drought_status, get_drought_alerts
+from wapimaji_mcp.server import get_drought_alerts, get_drought_status
+
 
 def test_drought_status_nairobi():
     result = get_drought_status("Nairobi")

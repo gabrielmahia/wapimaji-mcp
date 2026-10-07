@@ -43,7 +43,12 @@ def publish_drought_event(county: str, county_code: int, phase: int,
         return {"published": False, "reason": "africa-coord-bus not installed (pip install africa-coord-bus)"}
 
     try:
-        from africa_coord_bus import CoordinationEvent, EventDomain, EventSeverity, KenyaLocation
+        from africa_coord_bus import (
+            CoordinationEvent,
+            EventDomain,
+            EventSeverity,
+            KenyaLocation,
+        )
     except ImportError:
         return {"published": False, "reason": "africa-coord-bus import failed"}
 
