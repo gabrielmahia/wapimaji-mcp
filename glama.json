@@ -34,7 +34,7 @@
   "tools": [
     {
       "name": "get_drought_status",
-      "description": "Get current NDMA drought phase classification for a Kenya county.\n    Returns drought phase (1=Minimal to 5=Famine), rainfall deficit %, and population affected.\n    county: Kenya county name e.g. Turkana, Marsabit, Garissa",
+      "description": "Get current NDMA drought phase classification for a Kenya county.\nReturns drought phase (1=Minimal to 5=Famine), rainfall deficit %, and population affected.\ncounty: Kenya county name e.g. Turkana, Marsabit, Garissa",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -44,7 +44,7 @@
     },
     {
       "name": "get_drought_alerts",
-      "description": "Get simulated Kenya county alerts in sandbox mode.\n    Live aggregate drought data is not implemented; production fails explicitly.\n    min_phase: 1=Minimal, 2=Stressed, 3=Crisis, 4=Emergency, 5=Famine",
+      "description": "Get simulated Kenya county alerts in sandbox mode.\nLive aggregate drought data is not implemented; production fails explicitly.\nmin_phase: 1=Minimal, 2=Stressed, 3=Crisis, 4=Emergency, 5=Famine",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -54,7 +54,7 @@
     },
     {
       "name": "sms_drought_alert",
-      "description": "Send a drought alert SMS via Africa's Talking.\n    DESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.\n    Sandbox returns a simulation without contacting the provider.\n    confirm_send: explicit user confirmation for this send; defaults to false.\n    phone_numbers: list of E.164 format numbers e.g. [\"+254712345678\"]\n    message: SMS text (max 160 chars)\n    sender_id: registered AT sender ID",
+      "description": "Send a drought alert SMS via Africa's Talking.\nDESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.\nSandbox returns a simulation without contacting the provider.\nconfirm_send: explicit user confirmation for this send; defaults to false.\nphone_numbers: list of E.164 format numbers e.g. [\"+254712345678\"]\nmessage: SMS text (max 160 chars)\nsender_id: registered AT sender ID",
       "annotations": {
         "readOnlyHint": false,
         "destructiveHint": true,
@@ -64,7 +64,7 @@
     },
     {
       "name": "publish_drought_coordination",
-      "description": "Publish a drought coordination event to africa-coord-bus so downstream\n    MCP servers respond automatically (bima-mcp insurance eval, kilimo-mcp\n    advisory, afya-mcp malnutrition watch, county-mcp alert).\n    Phase 2=Stressed, 3=Crisis, 4=Emergency trigger coordination."
+      "description": "Publish a drought coordination event to africa-coord-bus so downstream\nMCP servers respond automatically (bima-mcp insurance eval, kilimo-mcp\nadvisory, afya-mcp malnutrition watch, county-mcp alert).\nPhase 2=Stressed, 3=Crisis, 4=Emergency trigger coordination."
     }
   ],
   "repository": {
