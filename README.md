@@ -13,41 +13,27 @@ Install: `pip install wapimaji-mcp` · Use with any MCP client.
 ---
 
 
-> MCP server giving AI agents real-time access to Kenya's water stress and drought data — all 47 counties, NDMA drought phase classifications, and SMS alert capability via Africa's Talking.
+> A Kenya drought-response toolkit for AI agents: **simulated** county drought phases (no real NDMA data is integrated yet), SMS alerts through Africa's Talking that need explicit confirmation, and drought events published to the coordination bus.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
 
-## What it does
+## What it does, and does not
 
-WapiMaji MCP exposes Kenya drought and water stress data as MCP tools. Any Claude, GPT-4, or MCP-compatible AI agent can now:
-
-- Query live drought phase data for any of Kenya's 47 counties
-- Get water stress indices from NDMA drought monitor
-- Send SMS alerts to farmers via Africa's Talking when drought levels spike
-
-**One-prompt examples:**
-
-```
-"What is the current drought phase in Marsabit County?"
-→ Gets NDMA Phase 3 classification + rainfall deficit data
-
-"Which counties are in drought emergency right now?"
-→ Returns all counties at Phase 3+ with population affected
-
-"SMS these 500 Garissa farmers: drought phase has escalated to 3"
-→ Sends alerts via Africa's Talking across Safaricom + Airtel
-```
+- **Simulated drought phases for the 47 counties.** Values are generated from the county name so downstream flows can be built and tested. They are **not observations** and not NDMA data; every answer says `"synthetic": true`. Never use them for decisions.
+- **No real data source is integrated.** With `SANDBOX=false` the status tools return an explicit "not implemented, status unknown" error. NDMA publishes drought phases as periodic bulletins; FEWS NET and IPC publish food-security classifications through APIs that were slow or unverified when checked on 2026-10-07. Integrating one is the next step.
+- **SMS alerts** through Africa's Talking: simulated by default (`sent: false`); a live send needs `SANDBOX=false` and `confirm_send=true`.
+- **Coordination:** publish a drought event so downstream MCP servers (insurance, agriculture advisory, health, county alerts) can react.
 
 ## Tools
 
 | Tool | Type | Description |
 |------|------|-------------|
-| `get_drought_status` | Read-only | Current NDMA drought phase for a county |
-| `get_county_water_stress` | Read-only | Water stress index, rainfall deficit, river levels |
-| `get_drought_alerts` | Read-only | All counties at or above a given drought phase |
-| `sms_drought_alert` | Destructive | Send drought alert SMS via Africa's Talking |
+| `get_drought_status` | Read-only, simulated | A simulated drought phase for one county, labelled synthetic |
+| `get_drought_alerts` | Read-only, simulated | Simulated list of counties at or above a phase |
+| `sms_drought_alert` | Sends SMS | Send a drought alert SMS via Africa's Talking (needs `confirm_send=true` in live mode) |
+| `publish_drought_coordination` | Writes an event | Publish a drought coordination event for downstream servers |
 
 ## Install
 
@@ -88,9 +74,7 @@ Live SMS requires both `SANDBOX=false` and `confirm_send=true`, supplied only af
 the user explicitly confirms that send. Provider acceptance does not establish
 delivery to the recipient.
 
-- **NDMA** — National Drought Management Authority drought phase classifications
-- **Kenya Meteorological Department** — rainfall data
-- **FEWS NET** — Famine Early Warning System food security projections
+No real data source is integrated. Earlier versions listed NDMA, the Kenya Meteorological Department and FEWS NET here; the code never used them.
 
 ## Related
 
@@ -105,22 +89,9 @@ License: MIT
 Not affiliated with NDMA or Africa's Talking.
 
 
-## Data Sources
+## Related datasets
 
-This server draws on open and public domain datasets for drought intelligence:
-
-**Open Government Data (Public Domain)**
-- NASA MODIS NDVI — vegetation index for drought early warning
-- NOAA CHIRPS — daily rainfall estimates (0.05° resolution)
-- NASA TRMM — monthly precipitation
-- USDA FEWS NET — East Africa livelihood zones
-
-**Historical Baseline Data (Public Domain)**
-- East Africa Meteorological Records 1900-1940 (colonial era, PD)
-- Kew Gardens East Africa Survey 1910 (botanical PD)
-
-These are structured in [africa-open-climate-data](https://huggingface.co/datasets/gmahia/africa-open-climate-data)
-and [east-africa-agricultural-pd](https://huggingface.co/datasets/gmahia/east-africa-agricultural-pd).
+Earlier versions said this server draws on NASA MODIS NDVI, NOAA CHIRPS, TRMM and FEWS NET; it does not read any of them. The Hugging Face datasets [africa-open-climate-data](https://huggingface.co/datasets/gmahia/africa-open-climate-data) and [east-africa-agricultural-pd](https://huggingface.co/datasets/gmahia/east-africa-agricultural-pd) are separate resources.
 
 ## Part of the East Africa Coordination Stack
 

@@ -1,16 +1,20 @@
 """
-WapiMaji MCP — Kenya water stress and drought intelligence.
-MCP server exposing NDMA drought data and AT SMS alerts.
+WapiMaji MCP — a Kenya drought-response toolkit: SIMULATED county drought phases (no real NDMA data is integrated), SMS alerts that need explicit
+confirmation, and coordination events. The simulated values are generated from the county name; they are not observations.
 """
 import json
 import os
 
-import httpx
 from fastmcp import FastMCP
 
 from wapimaji_mcp.coordination import publish_drought_event
 
 mcp = FastMCP("wapimaji-mcp")
+
+# Annotations tell clients which tools are safe to auto-approve. The simulated reads touch nothing; SMS and event publishing do not.
+READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}
+SENDS_SMS = {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": True}
+WRITES_EVENT = {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False}
 
 COUNTIES = [
     "Nairobi","Mombasa","Kwale","Kilifi","Tana River","Lamu","Taita Taveta",
@@ -25,11 +29,12 @@ COUNTIES = [
 DROUGHT_PHASES = {1: "Minimal", 2: "Stressed", 3: "Crisis", 4: "Emergency", 5: "Famine"}
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_drought_status(county: str) -> dict:
     """
-    Get current NDMA drought phase classification for a Kenya county.
-    Returns drought phase (1=Minimal to 5=Famine), rainfall deficit %, and population affected.
+    Get a SIMULATED drought phase for a Kenya county. This is NOT NDMA data and not an observation: the values are generated from the county name
+    so that downstream flows can be built and tested, and every answer says "synthetic": true. No real drought data source is integrated yet.
+    Returns phase (1=Minimal to 5=Famine), rainfall deficit % and population affected, all simulated.
     county: Kenya county name e.g. Turkana, Marsabit, Garissa
     """
     county = county.strip().title()
@@ -46,20 +51,14 @@ def get_drought_status(county: str) -> dict:
             "phase_label": DROUGHT_PHASES[h],
             "rainfall_deficit_pct": round(((h - 1) * 15) + 10, 1),
             "population_affected": (h - 1) * 50000 + 10000,
-            "source": "NDMA Kenya (sandbox simulation)",
-            "note": "Set SANDBOX=false for live NDMA data",
+            "synthetic": True,
+            "source": "SIMULATION generated from the county name: not NDMA data and not an observation",
+            "note": "No verified drought data source is integrated; do not use for decisions.",
         }
-    try:
-        r = httpx.get(
-            f"https://www.ndma.go.ke/api/drought/{county.lower().replace(' ', '-')}",
-            timeout=10
-        )
-        return r.json()
-    except Exception as e:  # noqa: BLE001  (tool boundary: return the error to the model instead of crashing the server)
-        return {"error": str(e)}
+    return {"error": "Live drought data is not implemented: no verified NDMA data API is integrated (NDMA publishes drought phases as periodic bulletins); status is unknown", "sandbox": False}
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_drought_alerts(min_phase: int = 3) -> dict:
     """
     Get simulated Kenya county alerts in sandbox mode.
@@ -90,7 +89,7 @@ def get_drought_alerts(min_phase: int = 3) -> dict:
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=SENDS_SMS)
 def sms_drought_alert(
     phone_numbers: list,
     message: str,
@@ -132,7 +131,7 @@ if __name__ == "__main__":
     main()
 
 
-@mcp.tool()
+@mcp.tool(annotations=WRITES_EVENT)
 def publish_drought_coordination(county: str, phase: int = 0,
                                   rainfall_deficit_pct: float = 0.0) -> dict:
     """
