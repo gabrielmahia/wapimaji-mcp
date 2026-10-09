@@ -1,8 +1,8 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/1.0.0/server.json",
   "name": "wapimaji-mcp",
-  "version": "0.1.10",
-  "description": "MCP server for Kenya water stress and drought intelligence",
+  "version": "0.1.11",
+  "description": "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events",
   "license": "MIT",
   "homepage": "https://gabrielmahia.github.io",
   "author": {
@@ -34,7 +34,7 @@
   "tools": [
     {
       "name": "get_drought_status",
-      "description": "Get current NDMA drought phase classification for a Kenya county.\nReturns drought phase (1=Minimal to 5=Famine), rainfall deficit %, and population affected.\ncounty: Kenya county name e.g. Turkana, Marsabit, Garissa",
+      "description": "Get a SIMULATED drought phase for a Kenya county. This is NOT NDMA data and not an observation: the values are generated from the county name\nso that downstream flows can be built and tested, and every answer says \"synthetic\": true. No real drought data source is integrated yet.\nReturns phase (1=Minimal to 5=Famine), rainfall deficit % and population affected, all simulated.\ncounty: Kenya county name e.g. Turkana, Marsabit, Garissa",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
