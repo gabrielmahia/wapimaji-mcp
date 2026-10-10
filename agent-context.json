@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "repository": "gabrielmahia/wapimaji-mcp",
+  "project": "wapimaji-mcp",
+  "stable_branch": "main",
+  "integration_branch": "main",
+  "purpose": "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events.",
+  "cold_start": [
+    "AGENTS.md",
+    "README.md"
+  ],
+  "commands": {
+    "install": "pip install -e . pytest ruff",
+    "test": "python -m pytest tests -q",
+    "lint": "ruff check . --ignore E501 --ignore F401"
+  },
+  "coordination": {
+    "task_registry": "GitHub Issues",
+    "work_claim": "Draft PR",
+    "branch_pattern": "agent/<agent-name>/<issue-number>-<slug>",
+    "pr_title_pattern": "[CLAIM #<issue>] <agent-name>: <scope>",
+    "authority": "Tests and external reality, not model consensus"
+  },
+  "current_workstreams": [],
+  "prohibited_autonomous_actions": [
+    "change licensing",
+    "expose credentials",
+    "present simulated or demo data as real",
+    "weaken a safety guard or truth label"
+  ],
+  "reasoning_standard": {
+    "id": "coverage-adaptive-reasoning:v2",
+    "canonical": "https://github.com/gabrielmahia/nairobi-stack/blob/main/docs/COVERAGE_ADAPTIVE_REASONING.md"
+  }
+}
