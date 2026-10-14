@@ -34,7 +34,7 @@
   "tools": [
     {
       "name": "get_drought_status",
-      "description": "Get a SIMULATED drought phase for a Kenya county. This is NOT NDMA data and not an observation: the values are generated from the county name\nso that downstream flows can be built and tested, and every answer says \"synthetic\": true. No real drought data source is integrated yet.\nReturns phase (1=Minimal to 5=Famine), rainfall deficit % and population affected, all simulated.\ncounty: Kenya county name e.g. Turkana, Marsabit, Garissa",
+      "description": "SIMULATED drought phase for a Kenyan county: the values are generated from the county name, are NOT NDMA data and not an observation, and every answer says synthetic true. Use only to build and test flows, never for decisions. An unknown county returns an error; in live mode it returns an explicit not-implemented error because no data source is integrated. Returns county, phase, phase label, rainfall deficit percent, population affected, synthetic true, the source and a note. Read-only.",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -44,7 +44,7 @@
     },
     {
       "name": "get_drought_alerts",
-      "description": "Get simulated Kenya county alerts in sandbox mode.\nLive aggregate drought data is not implemented; production fails explicitly.\nmin_phase: 1=Minimal, 2=Stressed, 3=Crisis, 4=Emergency, 5=Famine",
+      "description": "List SIMULATED county drought alerts at or above a minimum phase (1 minimal, 2 stressed, 3 crisis, 4 emergency, 5 famine; default 3). Use only to build and test flows: this is sandbox data, not NDMA observation, and production returns an explicit not-implemented error. Returns the counties at that phase with population affected, the count, the phase queried and its label, sandbox true and the source. Read-only.",
       "annotations": {
         "readOnlyHint": true,
         "destructiveHint": false,
@@ -54,7 +54,7 @@
     },
     {
       "name": "sms_drought_alert",
-      "description": "Send a drought alert SMS via Africa's Talking.\nDESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.\nSandbox returns a simulation without contacting the provider.\nconfirm_send: explicit user confirmation for this send; defaults to false.\nphone_numbers: list of E.164 format numbers e.g. [\"+254712345678\"]\nmessage: SMS text (max 160 chars)\nsender_id: registered AT sender ID",
+      "description": "Send a drought alert SMS through Africa's Talking. Use only when the user has explicitly approved this exact message and recipient list. SENDS TO REAL PEOPLE: real messages go out only when SANDBOX=false and confirm_send=true; otherwise it simulates and reports the recipient count without contacting the provider. Returns sent, count and the provider response, or an error. Messages are limited to 160 characters. Sending cannot be undone.",
       "annotations": {
         "readOnlyHint": false,
         "destructiveHint": true,
@@ -64,7 +64,7 @@
     },
     {
       "name": "publish_drought_coordination",
-      "description": "Publish a drought coordination event to africa-coord-bus so downstream\nMCP servers respond automatically (bima-mcp insurance eval, kilimo-mcp\nadvisory, afya-mcp malnutrition watch, county-mcp alert).\nPhase 2=Stressed, 3=Crisis, 4=Emergency trigger coordination."
+      "description": "Publish a drought coordination event to africa-coord-bus so other servers can react (insurance evaluation, advisories, malnutrition watch, county alerts). Use when coordinating a drought response across servers. Phases 2 stressed, 3 crisis and 4 emergency trigger coordination; phase 0 takes the phase and deficit from get_drought_status, which is SIMULATED data. Returns published false with a reason if africa-coord-bus is not installed. Side effect: emits an event to the bus."
     }
   ],
   "repository": {
