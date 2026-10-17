@@ -5,12 +5,8 @@
 [![smithery badge](https://smithery.ai/badge/@gabrielmahia/wapimaji-mcp)](https://smithery.ai/server/@gabrielmahia/wapimaji-mcp)
 
 
----
-**Compatible with `claude-sonnet-5`** (released 2026-06-30) — Anthropic's most agentic
-Sonnet yet. Runs multi-step tool chains end-to-end without stopping short.
 Install: `pip install wapimaji-mcp` · Use with any MCP client.
 
----
 
 
 > A Kenya drought-response toolkit for AI agents: **simulated** county drought phases (no real NDMA data is integrated yet), SMS alerts through Africa's Talking that need explicit confirmation, and drought events published to the coordination bus.
@@ -106,7 +102,7 @@ pip install africa-coord-bus
 All servers: [pypi.org/user/gmahia](https://pypi.org/user/gmahia/)
 Live demo: [coord-cascade-demo](https://github.com/gabrielmahia/coord-cascade-demo)
 
-<!-- interconnect:v1 -->
+<!-- interconnect:v2 -->
 ## Part of the East Africa coordination stack
 
 - **Install & run:** `pip install reli-cli && reli list` — the MCP servers on the [official MCP Registry](https://registry.modelcontextprotocol.io) under `io.github.gabrielmahia`
@@ -115,4 +111,4 @@ Live demo: [coord-cascade-demo](https://github.com/gabrielmahia/coord-cascade-de
 - **Datasets:** [huggingface.co/gmahia](https://huggingface.co/gmahia) · **Docs hub:** [nairobi-stack](https://github.com/gabrielmahia/nairobi-stack)
 
 Model-agnostic by design: closed APIs, open-weight models, and small distilled models are all first-class citizens.
-<!-- /interconnect:v1 -->
+<!-- /interconnect:v2 -->
