@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "wapimaji-mcp"
-version = "0.1.13"
+version = "0.1.14"
 description = "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -14,6 +14,9 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 readme = "README.md"
 license = "MIT"
