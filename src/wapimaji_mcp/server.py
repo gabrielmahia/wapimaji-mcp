@@ -4,6 +4,8 @@ confirmation, and coordination events. The simulated values are generated from t
 """
 import json
 import os
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _pkg_version
 from typing import Annotated
 
 from fastmcp import FastMCP
@@ -11,7 +13,13 @@ from pydantic import Field
 
 from wapimaji_mcp.coordination import publish_drought_event
 
-mcp = FastMCP("wapimaji-mcp")
+try:
+    _VERSION = _pkg_version("wapimaji-mcp")
+except PackageNotFoundError:  # a source tree that was never installed
+    _VERSION = "0+unknown"
+
+
+mcp = FastMCP("wapimaji-mcp", version=_VERSION)
 
 # Annotations tell clients which tools are safe to auto-approve. The simulated reads touch nothing; SMS and event publishing do not.
 READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}

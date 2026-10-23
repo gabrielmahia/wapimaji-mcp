@@ -1,5 +1,9 @@
 ## [0.1.3] — 2026-06-28
 
+## 0.1.15
+- The server reports its own version in the MCP handshake (it reported the FastMCP library version).
+- Publishing: PyPI action pinned to a commit; `mcp-publisher` pinned and checksum-verified; registry step skipped when already published; least-privilege CI token.
+
 ### Added
 - `coordination.py`: optional integration with africa-coord-bus
 - `publish_drought_coordination` MCP tool — publishes drought events to coordination bus
