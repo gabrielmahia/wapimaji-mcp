@@ -7,6 +7,8 @@
 
 Install: `pip install wapimaji-mcp` · Use with any MCP client.
 
+**Maintainer:** Gabriel Mahia · [Software citation](CITATION.cff) · [MIT license](LICENSE). Please cite or link to the original project when it helps your work; preserve required copyright and license notices if redistributing substantial portions. Public citation is appreciated, not an additional MIT condition.
+
 
 
 > A Kenya drought-response toolkit for AI agents: **simulated** county drought phases (no real NDMA data is integrated yet), SMS alerts through Africa's Talking that need explicit confirmation, and drought events published to the coordination bus.
