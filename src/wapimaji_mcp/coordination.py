@@ -12,9 +12,21 @@ Optional: only active when africa-coord-bus is installed.
 Set COORD_BUS_QUEUE env var to path for offline event queue.
 """
 import os
+import tempfile
 
 _BUS = None
 _HAS_BUS = False
+
+def _default_queue_path() -> str:
+    """A per-user, owner-only location. A predictable file in a shared /tmp lets another local user pre-create or symlink it; if the home cache cannot be created, a private temp directory is used instead."""
+    base = os.getenv("XDG_CACHE_HOME") or os.path.join(os.path.expanduser("~"), ".cache")
+    try:
+        d = os.path.join(base, "wapimaji-mcp")
+        os.makedirs(d, mode=0o700, exist_ok=True)
+    except OSError:
+        d = tempfile.mkdtemp(prefix="wapimaji-")   # created with mode 0700
+    return os.path.join(d, "coord-bus.jsonl")
+
 
 def _get_bus():
     global _BUS, _HAS_BUS
@@ -22,7 +34,7 @@ def _get_bus():
         return _BUS
     try:
         from africa_coord_bus import EventBus
-        queue_path = os.getenv("COORD_BUS_QUEUE", "/tmp/wapimaji-coord-bus.jsonl")
+        queue_path = os.getenv("COORD_BUS_QUEUE") or _default_queue_path()
         _BUS = EventBus(queue_path=queue_path)
         _HAS_BUS = True
     except ImportError:

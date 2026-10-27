@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wapimaji-mcp"
-version = "0.1.15"
+version = "0.1.16"
 description = "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events"
 classifiers = [
     "Development Status :: 4 - Beta",

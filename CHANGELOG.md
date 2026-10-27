@@ -1,3 +1,6 @@
+## 0.1.16
+- Security hardening from a static sweep: the default event-queue file is now per-user and owner-only (it was a fixed path in the shared `/tmp`); the two MD5 calls that derive simulated drought phases now say they are not for security (`usedforsecurity=False`; the phases are unchanged). `SECURITY.md` now holds the required reporting block and no longer says the data is real (it is simulated). 4 new tests.
+
 ## [0.1.3] — 2026-06-28
 
 ## 0.1.15
