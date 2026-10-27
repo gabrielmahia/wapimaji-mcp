@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this project and its contributors."
+type: software
+title: "wapimaji-mcp"
+abstract: "Kenya drought-response MCP toolkit with simulated phases and confirmed alerts"
+authors:
+  - family-names: Mahia
+    given-names: Gabriel
+    email: contact@aikungfu.dev
+repository-code: "https://github.com/gabrielmahia/wapimaji-mcp"
+url: "https://pypi.org/project/wapimaji-mcp/"
+license: MIT
+keywords:
+  - mcp
+  - kenya
+  - water
+  - drought
