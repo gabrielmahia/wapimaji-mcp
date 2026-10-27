@@ -54,7 +54,7 @@ def get_drought_status(county: Annotated[str, Field(description="Kenyan county n
     sandbox = os.getenv("SANDBOX", "true").lower() == "true"
     if sandbox:
         import hashlib
-        h = int(hashlib.md5(county.encode()).hexdigest()[:4], 16) % 4 + 1
+        h = int(hashlib.md5(county.encode(), usedforsecurity=False).hexdigest()[:4], 16) % 4 + 1
         return {
             "county": county,
             "phase": h,
@@ -81,7 +81,7 @@ def get_drought_alerts(min_phase: Annotated[int, Field(description="Minimum phas
     import hashlib
     results = []
     for county in COUNTIES:
-        h = int(hashlib.md5(county.encode()).hexdigest()[:4], 16) % 4 + 1
+        h = int(hashlib.md5(county.encode(), usedforsecurity=False).hexdigest()[:4], 16) % 4 + 1
         if h >= min_phase:
             results.append({
                 "county": county,

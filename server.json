@@ -6,12 +6,12 @@
     "url": "https://github.com/gabrielmahia/wapimaji-mcp",
     "source": "github"
   },
-  "version": "0.1.15",
+  "version": "0.1.16",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "wapimaji-mcp",
-      "version": "0.1.15",
+      "version": "0.1.16",
       "transport": {
         "type": "stdio"
       }
