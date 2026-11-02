@@ -12,7 +12,7 @@ Install: `pip install wapimaji-mcp` · Use with any MCP client.
 > A Kenya drought-response toolkit for AI agents: **simulated** county drought phases (no real NDMA data is integrated yet), SMS alerts through Africa's Talking that need explicit confirmation, and drought events published to the coordination bus.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
 
 ## What it does, and does not
