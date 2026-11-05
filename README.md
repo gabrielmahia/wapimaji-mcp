@@ -30,6 +30,8 @@ Install: `pip install wapimaji-mcp` · Use with any MCP client.
 | `get_drought_alerts` | Read-only, simulated | Simulated list of counties at or above a phase |
 | `sms_drought_alert` | Sends SMS | Send a drought alert SMS via Africa's Talking (needs `confirm_send=true` in live mode) |
 | `publish_drought_coordination` | Writes an event | Publish a drought coordination event for downstream servers |
+| `river_discharge_forecast` | Read-only, live | Forecast daily river flow and peak day, from Copernicus GloFAS via Open-Meteo |
+| `rainfall_forecast` | Read-only, live | Daily rain forecast (mm, chance) for any location, from Open-Meteo |
 
 ## Install
 
@@ -88,6 +90,13 @@ Not affiliated with NDMA or Africa's Talking.
 ## Related datasets
 
 Earlier versions said this server draws on NASA MODIS NDVI, NOAA CHIRPS, TRMM and FEWS NET; it does not read any of them. The Hugging Face datasets [africa-open-climate-data](https://huggingface.co/datasets/gmahia/africa-open-climate-data) and [east-africa-agricultural-pd](https://huggingface.co/datasets/gmahia/east-africa-agricultural-pd) are separate resources.
+
+## Live data
+
+- `river_discharge_forecast`: forecast daily river flow (m³/s) and the peak day at a point on a river, from Copernicus [GloFAS](https://global-flood.emergency.copernicus.eu) via Open-Meteo (CC BY 4.0). Not an official flood warning.
+- `rainfall_forecast`: daily rain (mm) and chance of rain for up to 16 days at any location, from [Open-Meteo](https://open-meteo.com) (CC BY 4.0; free API for non-commercial use).
+
+Each live answer names its source, attribution and retrieval time; if a service does not answer, the tool returns an error instead of a number. The other tools are unchanged.
 
 ## Part of the East Africa Coordination Stack
 
