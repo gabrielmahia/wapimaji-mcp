@@ -1,7 +1,7 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/1.0.0/server.json",
   "name": "wapimaji-mcp",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events",
   "license": "MIT",
   "homepage": "https://gabrielmahia.github.io",
@@ -65,6 +65,26 @@
     {
       "name": "publish_drought_coordination",
       "description": "Publish a drought coordination event to africa-coord-bus so other servers can react (insurance evaluation, advisories, malnutrition watch, county alerts). Use when coordinating a drought response across servers. Phases 2 stressed, 3 crisis and 4 emergency trigger coordination; phase 0 takes the phase and deficit from get_drought_status, which is SIMULATED data. Returns published false with a reason if africa-coord-bus is not installed. Side effect: emits an event to the bus."
+    },
+    {
+      "name": "river_discharge_forecast",
+      "description": "Get the forecast daily river flow (discharge, cubic metres per second) at a point on a river, from the Copernicus Global Flood Awareness System (GloFAS) via the free Open-Meteo flood service. Use when someone is watching a river for flood risk, planning a crossing or water abstraction, or comparing this week's flow with the days ahead, for example on the Tana, Athi, Nzoia or Nyando. Returns one row per day, the peak day, the source, its attribution and the retrieval time; on a network or service failure it returns an error instead of numbers. Read-only; contacts an external service.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "rainfall_forecast",
+      "description": "Get the daily rainfall forecast for a location in Kenya (or anywhere) for up to 16 days, from the free Open-Meteo weather service: expected millimetres and the chance of rain each day. Use when someone is planning planting, irrigation, water storage, travel or flood preparation and needs the rain outlook for a place. Returns one row per day with rain in mm and the maximum chance of rain in percent, the total, the source, its attribution and the retrieval time; on a network or service failure it returns an error instead of a forecast. Read-only; contacts an external service.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     }
   ],
   "repository": {

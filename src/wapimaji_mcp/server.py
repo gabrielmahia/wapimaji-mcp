@@ -4,6 +4,10 @@ confirmation, and coordination events. The simulated values are generated from t
 """
 import json
 import os
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import UTC, datetime, timedelta
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _pkg_version
 from typing import Annotated
@@ -131,6 +135,68 @@ def sms_drought_alert(
         return {"sent": True, "response": response, "count": len(phone_numbers)}
     except Exception as e:  # noqa: BLE001  (tool boundary: return the error to the model instead of crashing the server)
         return {"error": str(e)}
+
+
+
+# ── Live data (free public services) ─────────────────────────────────
+# Live tools change nothing anywhere, but they contact an outside service, and clients should know that.
+LIVE_READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True}
+LIVE_TOOLS = {"river_discharge_forecast", "rainfall_forecast"}
+_LIVE_UA = {"User-Agent": "wapimaji-mcp (https://github.com/gabrielmahia/wapimaji-mcp)", "Accept": "application/json"}
+_LIVE_ERRORS = (urllib.error.URLError, TimeoutError, ValueError, KeyError, TypeError, IndexError)
+
+
+def _live_get(url: str, params: dict | None = None, timeout: float = 20.0):
+    if params:
+        url = url + "?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, headers=_LIVE_UA)
+    with urllib.request.urlopen(req, timeout=timeout) as r:  # fixed https endpoints only
+        return json.loads(r.read().decode("utf-8"))
+
+
+def _live_meta(source: str, attribution: str) -> dict:
+    return {"source": source, "attribution": attribution, "retrieved_at": datetime.now(UTC).isoformat(timespec="seconds")}
+
+@mcp.tool(name="river_discharge_forecast", annotations=LIVE_READ_ONLY, description="Get the forecast daily river flow (discharge, cubic metres per second) at a point on a river, from the Copernicus Global Flood Awareness System (GloFAS) via the free Open-Meteo flood service. Use when someone is watching a river for flood risk, planning a crossing or water abstraction, or comparing this week's flow with the days ahead, for example on the Tana, Athi, Nzoia or Nyando. Returns one row per day, the peak day, the source, its attribution and the retrieval time; on a network or service failure it returns an error instead of numbers. Read-only; contacts an external service.")
+def river_discharge_forecast(latitude: Annotated[float, Field(description="Latitude of a point on the river, in decimal degrees; between -90 and 90. Choose a point on the main channel.")],
+                             longitude: Annotated[float, Field(description="Longitude of the point, in decimal degrees; between -180 and 180.")],
+                             days: Annotated[int, Field(description="How many days ahead to forecast, between 1 and 30.")] = 7) -> dict:
+    meta = _live_meta("LIVE — Copernicus GloFAS via the Open-Meteo flood API (flood-api.open-meteo.com)", "Copernicus Emergency Management Service, Global Flood Awareness System, via Open-Meteo.com, CC BY 4.0.")
+    if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+        return {"error": "latitude must be between -90 and 90 and longitude between -180 and 180", **meta}
+    if not 1 <= days <= 30:
+        return {"error": "days must be between 1 and 30", **meta}
+    try:
+        d = _live_get("https://flood-api.open-meteo.com/v1/flood", {"latitude": latitude, "longitude": longitude, "daily": "river_discharge", "forecast_days": days})
+        rows = [{"date": t, "discharge_m3s": q} for t, q in zip(d["daily"]["time"], d["daily"]["river_discharge"], strict=True)]
+        if not rows:
+            raise ValueError("empty forecast")
+    except _LIVE_ERRORS as e:
+        return {"error": f"the flood service did not return a usable forecast ({type(e).__name__}); no figures are given without it. Try again later.", **meta}
+    valid = [r for r in rows if r["discharge_m3s"] is not None]
+    peak = max(valid, key=lambda r: r["discharge_m3s"]) if valid else None
+    return {"latitude": latitude, "longitude": longitude, "days": rows, "peak": peak,
+            "note": "A 5 km model grid: small streams are not resolved, and a value near zero usually means the point is not on a modelled river. Not an official flood warning: follow the Kenya Meteorological Department and the Water Resources Authority.", **meta}
+
+@mcp.tool(name="rainfall_forecast", annotations=LIVE_READ_ONLY, description="Get the daily rainfall forecast for a location in Kenya (or anywhere) for up to 16 days, from the free Open-Meteo weather service: expected millimetres and the chance of rain each day. Use when someone is planning planting, irrigation, water storage, travel or flood preparation and needs the rain outlook for a place. Returns one row per day with rain in mm and the maximum chance of rain in percent, the total, the source, its attribution and the retrieval time; on a network or service failure it returns an error instead of a forecast. Read-only; contacts an external service.")
+def rainfall_forecast(latitude: Annotated[float, Field(description="Latitude in decimal degrees, for example -1.29 for Nairobi or -0.09 for Kisumu; between -90 and 90.")],
+                      longitude: Annotated[float, Field(description="Longitude in decimal degrees, for example 36.82 for Nairobi; between -180 and 180.")],
+                      days: Annotated[int, Field(description="How many days ahead to forecast, between 1 and 16.")] = 7) -> dict:
+    meta = _live_meta("LIVE — Open-Meteo weather forecast API (api.open-meteo.com)", "Weather data by Open-Meteo.com, CC BY 4.0. The free API is for non-commercial use.")
+    if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+        return {"error": "latitude must be between -90 and 90 and longitude between -180 and 180", **meta}
+    if not 1 <= days <= 16:
+        return {"error": "days must be between 1 and 16", **meta}
+    try:
+        d = _live_get("https://api.open-meteo.com/v1/forecast", {"latitude": latitude, "longitude": longitude, "daily": "precipitation_sum,precipitation_probability_max", "forecast_days": days, "timezone": "Africa/Nairobi"})
+        daily = d["daily"]
+        rows = [{"date": t, "rain_mm": r, "chance_pct": p} for t, r, p in zip(daily["time"], daily["precipitation_sum"], daily["precipitation_probability_max"], strict=True)]
+        if not rows:
+            raise ValueError("empty forecast")
+    except _LIVE_ERRORS as e:
+        return {"error": f"Open-Meteo did not return a usable forecast ({type(e).__name__}); no forecast is given without it. Try again later.", **meta}
+    return {"latitude": latitude, "longitude": longitude, "days": rows, "total_rain_mm": round(sum(r["rain_mm"] or 0 for r in rows), 1),
+            "note": "A model forecast: confidence falls with each day ahead, and local storms can differ from the grid forecast.", **meta}
 
 
 def main():
