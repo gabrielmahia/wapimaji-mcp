@@ -2,12 +2,8 @@
 <!-- mcp-name: io.github.gabrielmahia/wapimaji-mcp -->
 
 [![wapimaji-mcp Glama score](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp/badges/score.svg)](https://glama.ai/mcp/servers/gabrielmahia/wapimaji-mcp)
-[![smithery badge](https://smithery.ai/badge/@gabrielmahia/wapimaji-mcp)](https://smithery.ai/server/@gabrielmahia/wapimaji-mcp)
-
 
 Install: `pip install wapimaji-mcp` · Use with any MCP client.
-
-
 
 > A Kenya drought-response toolkit for AI agents: **simulated** county drought phases (no real NDMA data is integrated yet), SMS alerts through Africa's Talking that need explicit confirmation, and drought events published to the coordination bus.
 
@@ -85,7 +81,6 @@ No real data source is integrated. Earlier versions listed NDMA, the Kenya Meteo
 © 2026 Gabriel Mahia · [contact@aikungfu.dev](mailto:contact@aikungfu.dev)
 License: MIT
 Not affiliated with NDMA or Africa's Talking.
-
 
 ## Related datasets
 
