@@ -30,9 +30,9 @@ def test_clients_are_told_which_tools_are_safe_to_auto_approve():
         async with Client(server.mcp) as c:
             return {t.name: t.annotations for t in await c.list_tools()}
     a = asyncio.run(ann())
-    assert a["get_drought_status"].readOnlyHint is True and a["get_drought_alerts"].readOnlyHint is True
-    assert a["sms_drought_alert"].readOnlyHint is False and a["sms_drought_alert"].openWorldHint is True
-    assert a["publish_drought_coordination"].readOnlyHint is False
+    assert a["get_drought_status"].read_only_hint is True and a["get_drought_alerts"].read_only_hint is True
+    assert a["sms_drought_alert"].read_only_hint is False and a["sms_drought_alert"].open_world_hint is True
+    assert a["publish_drought_coordination"].read_only_hint is False
 
 
 def test_the_readme_tool_table_lists_only_tools_that_exist_and_all_of_them():

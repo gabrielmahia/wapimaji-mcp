@@ -14,4 +14,4 @@ def test_every_live_tool_is_read_only_and_says_it_contacts_an_outside_service():
     assert server.LIVE_TOOLS <= set(ts)
     for name in server.LIVE_TOOLS:
         a = ts[name].annotations
-        assert a is not None and a.readOnlyHint is True and a.openWorldHint is True, name
+        assert a is not None and a.read_only_hint is True and a.open_world_hint is True, name
