@@ -15,7 +15,7 @@ Install: `pip install wapimaji-mcp` · Use with any MCP client.
 
 - **Simulated drought phases for the 47 counties.** Values are generated from the county name so downstream flows can be built and tested. They are **not observations** and not NDMA data; every answer says `"synthetic": true`. Never use them for decisions.
 - **No real data source is integrated.** With `SANDBOX=false` the status tools return an explicit "not implemented, status unknown" error. NDMA publishes drought phases as periodic bulletins; FEWS NET and IPC publish food-security classifications through APIs that were slow or unverified when checked on 2026-10-07. Integrating one is the next step.
-- **SMS alerts** through Africa's Talking: simulated by default (`sent: false`); a live send needs `SANDBOX=false` and `confirm_send=true`.
+- **SMS alerts** through Africa's Talking: simulated by default (`sent: false`); a live send needs `SANDBOX=false`, `confirm_send=true` **and** every recipient on the operator's `WAPIMAJI_SMS_ALLOWLIST` (empty by default, so live sending is off).
 - **Coordination:** publish a drought event so downstream MCP servers (insurance, agriculture advisory, health, county alerts) can react.
 
 ## Tools
@@ -24,7 +24,7 @@ Install: `pip install wapimaji-mcp` · Use with any MCP client.
 |------|------|-------------|
 | `get_drought_status` | Read-only, simulated | A simulated drought phase for one county, labelled synthetic |
 | `get_drought_alerts` | Read-only, simulated | Simulated list of counties at or above a phase |
-| `sms_drought_alert` | Sends SMS | Send a drought alert SMS via Africa's Talking (needs `confirm_send=true` in live mode) |
+| `sms_drought_alert` | Sends SMS | Send a drought alert SMS via Africa's Talking (live mode needs `confirm_send=true` and an operator allowlist) |
 | `publish_drought_coordination` | Writes an event | Publish a drought coordination event for downstream servers |
 | `river_discharge_forecast` | Read-only, live | Forecast daily river flow and peak day, from Copernicus GloFAS via Open-Meteo |
 | `rainfall_forecast` | Read-only, live | Daily rain forecast (mm, chance) for any location, from Open-Meteo |
@@ -64,8 +64,10 @@ aggregate alerts. These values are not observations from NDMA. Live aggregate
 alerts are not implemented and return an explicit error with unknown status.
 
 SMS calls in sandbox return `sent: false` without contacting Africa's Talking.
-Live SMS requires both `SANDBOX=false` and `confirm_send=true`, supplied only after
-the user explicitly confirms that send. Provider acceptance does not establish
+Live SMS requires `SANDBOX=false`, `confirm_send=true` (supplied only after the user explicitly
+confirms that send) and an operator-set `WAPIMAJI_SMS_ALLOWLIST` of the numbers that may receive
+alerts, because `confirm_send` is supplied by the model itself and is not an independent check. At most
+`WAPIMAJI_MAX_SMS_RECIPIENTS` (default 20) recipients and 160 characters per call. Provider acceptance does not establish
 delivery to the recipient.
 
 No real data source is integrated. Earlier versions listed NDMA, the Kenya Meteorological Department and FEWS NET here; the code never used them.

@@ -1,6 +1,11 @@
 ## 0.1.17
 - Dropped Python 3.10, which reached end of life in October 2026: this release requires Python 3.11 or later.
 
+## Unreleased
+
+### Security
+- **Live `sms_drought_alert` now has operator-side limits.** Its only live-mode check was the model-supplied `confirm_send`, so a model could message any list of numbers (no recipient cap, and the documented 160-character limit was not enforced). Live sends now also need every recipient on the operator's `WAPIMAJI_SMS_ALLOWLIST` (empty by default, so live sending is off), at most `WAPIMAJI_MAX_SMS_RECIPIENTS` recipients (default 20) and 160 characters. The sandbox, which simulates and is the default, is unchanged. Found 2026-11-10 in a review of every tool in the estate that messages or pays people.
+
 ## 0.1.16
 - Security hardening from a static sweep: the default event-queue file is now per-user and owner-only (it was a fixed path in the shared `/tmp`); the two MD5 calls that derive simulated drought phases now say they are not for security (`usedforsecurity=False`; the phases are unchanged). `SECURITY.md` now holds the required reporting block and no longer says the data is real (it is simulated). 4 new tests.
 
