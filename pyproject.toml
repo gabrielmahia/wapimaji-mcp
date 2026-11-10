@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wapimaji-mcp"
-version = "0.1.20"
+version = "0.1.21"
 description = "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -24,9 +24,9 @@ authors = [{name = "Gabriel Mahia", email = "contact@aikungfu.dev"}]
 keywords = ["mcp", "kenya", "water", "drought", "africa", "ndma", "east-africa"]
 requires-python = ">=3.11"
 dependencies = [
-    "fastmcp>=4,<5",  # standalone FastMCP: serves both MCP protocol eras (legacy and 2026-07-28)
+    "fastmcp>=4.1.4,<5",  # standalone FastMCP: serves both MCP protocol eras (legacy and 2026-07-28)
     "africastalking>=1.2.7",
-    "python-dotenv>=1.0.0",
+    "python-dotenv>=1.2.2",
     "pydantic>=2.5.0",
 ]
 
