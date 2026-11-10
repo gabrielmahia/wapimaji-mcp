@@ -27,6 +27,45 @@ mcp = FastMCP("wapimaji-mcp", version=_VERSION)
 
 # Annotations tell clients which tools are safe to auto-approve. The simulated reads touch nothing; SMS and event publishing do not.
 READ_ONLY = {"readOnlyHint": True, "idempotentHint": True, "openWorldHint": False}
+# Live SMS boundary. `confirm_send` is supplied by the model itself, so on its own it is not an independent check: a model could be talked into
+# messaging anyone. These limits are set by the OPERATOR in the server's environment, which the model cannot change.
+SMS_MAX_CHARS = 160
+DEFAULT_SMS_RECIPIENT_CAP = 20
+
+
+def _sms_allowlist() -> set:
+    """WAPIMAJI_SMS_ALLOWLIST: comma-separated E.164 numbers that may receive a live SMS. Empty (the default) means live sending is off."""
+    return {n.strip() for n in os.getenv("WAPIMAJI_SMS_ALLOWLIST", "").split(",") if n.strip()}
+
+
+def _sms_cap() -> int:
+    """WAPIMAJI_MAX_SMS_RECIPIENTS: per-call recipient cap in live mode (default 20; an invalid or non-positive value falls back to the default)."""
+    try:
+        value = int(os.getenv("WAPIMAJI_MAX_SMS_RECIPIENTS", ""))
+    except ValueError:
+        return DEFAULT_SMS_RECIPIENT_CAP
+    return value if value >= 1 else DEFAULT_SMS_RECIPIENT_CAP
+
+
+def _live_sms_refusal(phone_numbers, message):
+    """None if a live SMS may go out; otherwise the refusal to return to the model."""
+    if not isinstance(phone_numbers, list) or not phone_numbers or not all(isinstance(n, str) and n.strip() for n in phone_numbers):
+        return {"sent": False, "error": "phone_numbers must be a non-empty list of E.164 number strings."}
+    if not isinstance(message, str) or not message.strip():
+        return {"sent": False, "error": "message must be non-empty text."}
+    if len(message) > SMS_MAX_CHARS:
+        return {"sent": False, "error": f"message is {len(message)} characters; the limit is {SMS_MAX_CHARS}."}
+    if len(phone_numbers) > _sms_cap():
+        return {"sent": False, "error": f"{len(phone_numbers)} recipients exceeds the per-call cap of {_sms_cap()} (operator setting WAPIMAJI_MAX_SMS_RECIPIENTS)."}
+    allowed = _sms_allowlist()
+    if not allowed:
+        return {"sent": False, "error": "Live SMS is off until the operator sets WAPIMAJI_SMS_ALLOWLIST to the numbers that may receive alerts. The model cannot change this."}
+    outside = [n for n in phone_numbers if n.strip() not in allowed]
+    if outside:
+        return {"sent": False, "error": f"{len(outside)} recipient(s) are not on the operator's WAPIMAJI_SMS_ALLOWLIST (for example {outside[0]}). Nothing was sent."}
+    return None
+
+
 SENDS_SMS = {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": True}
 WRITES_EVENT = {"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False, "openWorldHint": False}
 
@@ -103,7 +142,7 @@ def get_drought_alerts(min_phase: Annotated[int, Field(description="Minimum phas
     }
 
 
-@mcp.tool(description="Send a drought alert SMS through Africa's Talking. Use only when the user has explicitly approved this exact message and recipient list. SENDS TO REAL PEOPLE: real messages go out only when SANDBOX=false and confirm_send=true; otherwise it simulates and reports the recipient count without contacting the provider. Returns sent, count and the provider response, or an error. Messages are limited to 160 characters. Sending cannot be undone.", annotations=SENDS_SMS)
+@mcp.tool(description="Send a drought alert SMS through Africa's Talking. Use only when the user has explicitly approved this exact message and recipient list. SENDS TO REAL PEOPLE: real messages go out only when SANDBOX=false, confirm_send=true and every recipient is on the operator's WAPIMAJI_SMS_ALLOWLIST (empty by default, so live sending is off; at most 20 recipients per call); otherwise it simulates and reports the recipient count without contacting the provider. Returns sent, count and the provider response, or an error. Messages are limited to 160 characters. Sending cannot be undone.", annotations=SENDS_SMS)
 def sms_drought_alert(
     phone_numbers: Annotated[list, Field(description="List of recipient numbers in E.164 format such as ['+254712345678'].")],
     message: Annotated[str, Field(description="SMS text, at most 160 characters.")],
@@ -112,7 +151,7 @@ def sms_drought_alert(
 ) -> dict:
     """
     Send a drought alert SMS via Africa's Talking.
-    DESTRUCTIVE — sends real SMS only with SANDBOX=false and confirm_send=true.
+    DESTRUCTIVE — sends real SMS only with SANDBOX=false, confirm_send=true and recipients on the operator's allowlist.
     Sandbox returns a simulation without contacting the provider.
     confirm_send: explicit user confirmation for this send; defaults to false.
     phone_numbers: list of E.164 format numbers e.g. ["+254712345678"]
@@ -124,6 +163,9 @@ def sms_drought_alert(
                 "note": "Sandbox simulation; no SMS sent"}
     if confirm_send is not True:
         return {"sent": False, "error": "Explicit user confirmation is required (confirm_send=true)"}
+    refusal = _live_sms_refusal(phone_numbers, message)
+    if refusal:
+        return refusal
     try:
         import africastalking
         username = os.getenv("AT_USERNAME", "sandbox")

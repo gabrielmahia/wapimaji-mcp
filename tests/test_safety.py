@@ -46,7 +46,8 @@ def test_confirmed_live_uses_stub_provider(monkeypatch):
         SMS=SimpleNamespace(send=lambda *args, **kwargs: calls.append("send") or {"stub": True}),
     )
     monkeypatch.setitem(sys.modules, "africastalking", stub)
-    result = sms_drought_alert([], "test", confirm_send=True)
+    monkeypatch.setenv("WAPIMAJI_SMS_ALLOWLIST", "+254700000000")
+    result = sms_drought_alert(["+254700000000"], "test", confirm_send=True)
     assert result["sent"] is True
     assert calls == ["initialize", "send"]
     assert result["response"] == {"stub": True}
