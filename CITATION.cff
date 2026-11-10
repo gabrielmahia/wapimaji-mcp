@@ -3,7 +3,7 @@ message: "If you use this software, please cite it as below."
 type: software
 title: "wapimaji-mcp"
 abstract: "Kenya drought-response MCP toolkit: simulated county drought phases (no real NDMA data yet), confirmed SMS alerts, coordination events"
-version: "0.1.19"
+version: "0.1.20"
 authors:
   - family-names: "Mahia"
     given-names: "Gabriel"
